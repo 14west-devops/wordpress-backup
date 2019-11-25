@@ -1,6 +1,6 @@
 FROM ubuntu
 
-MAINTAINER Angelo Veltens <angelo.veltens@online.de>
+LABEL maintainer="DevOps <devops@14west.us>"
 
 RUN apt-get update && \
     apt-get install mysql-client cron bzip2 -y && \
@@ -9,7 +9,7 @@ RUN apt-get update && \
     mkdir /backups
 
 ENV MYSQL_ENV_MYSQL_HOST mysql
-ENV BACKUP_TIME 0 3 * * *
+ENV BACKUP_TIME "0 3 * * *""
 
 COPY docker-entrypoint.sh /entrypoint.sh
 COPY backup restore /bin/
