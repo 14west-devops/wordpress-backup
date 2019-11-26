@@ -17,14 +17,15 @@ RUN date &&\
 
 #create backup folder and give user access
 RUN mkdir /backups
-RUN chown -R wp-backup:wp-backup /backups
+RUN chown -R wp-backup:wp-backup /backups &&\
+    chown -R wp-backup:wp-backup /bin
     
 ENV MYSQL_ENV_MYSQL_HOST mysql-db
 ENV BACKUP_TIME "0 3 * * *"
 
 # copy in and allow execute of scripts
-COPY docker-entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY docker-entrypoint.sh bin/entrypoint.sh
+RUN chmod +x bin/entrypoint.sh
 
 COPY backup restore /bin/
 RUN chmod +x /bin/backup &&\
@@ -33,6 +34,6 @@ RUN chmod +x /bin/backup &&\
 VOLUME /backups
 
 USER wp-backup
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["bin/entrypoint.sh"]
 
 CMD ["cron", "-f"]
