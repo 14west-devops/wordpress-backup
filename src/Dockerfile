@@ -40,7 +40,9 @@ VOLUME /backups
 
 #adding a user to this image adds it at 999
 #using uid is recommended for openshift
-USER 999
+
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+USER 999
 
 CMD ["go-crond"]
