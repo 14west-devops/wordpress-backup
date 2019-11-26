@@ -9,7 +9,8 @@ USER root
 RUN groupadd -r wp-backup && useradd -r -g wp-backup wp-backup
 
 #patch away
-RUN apt-get update && \
+RUN date &&\
+    apt-get update && \
     apt-get install mysql-client cron bzip2 -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
