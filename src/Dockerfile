@@ -1,9 +1,12 @@
 FROM centos:centos7
 
-LABEL maintainer="DevOps <devops@14west.us>"
-
-#run setup as user
-USER root
+LABEL name="14WestDevOps/wordpress-backup" \
+      maintainer="DevOps <devops@14west.us>" \
+      vendor="14West" \
+      version="1" \
+      release="1" \
+      summary="Backup/Restore wordpress sites" \
+      description="Used to backup/restore a given wordpress site defined by environment variables"
 
 #add backup user
 RUN groupadd -r wp-backup && useradd -r -g wp-backup wp-backup
@@ -36,16 +39,17 @@ COPY backup restore /usr/local/bin/
 RUN chmod +x /usr/local/bin/backup &&\
     chmod +x /usr/local/bin/restore
 
-RUN chgrp -R 0 /usr/local/bin && \
-    chmod -R g=u /usr/local/bin
-
-VOLUME /backups
-
-#adding a user to this image adds it at 999
-#using uid is recommended for openshift
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+### Setup user for build execution and application runtime
+ENV APP_ROOT=/usr/local
+ENV PATH=${APP_ROOT}/bin:${PATH} HOME=${APP_ROOT}
+RUN chmod -R u+x ${APP_ROOT}/bin && \
+    chgrp -R 0 ${APP_ROOT} && \
+    chmod -R g=u ${APP_ROOT} /etc/passwd
 
 USER 999
+WORKDIR ${APP_ROOT}
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+VOLUME /backups
 
 CMD ["go-crond"]
