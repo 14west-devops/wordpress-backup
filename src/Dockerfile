@@ -46,6 +46,6 @@ VOLUME /backups
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-#USER 999
+USER 999
 
 CMD ["go-crond"]
