@@ -36,6 +36,9 @@ COPY backup restore /usr/local/bin/
 RUN chmod +x /usr/local/bin/backup &&\
     chmod +x /usr/local/bin/restore
 
+RUN chgrp -R 0 /usr/local/bin && \
+    chmod -R g=u /usr/local/bin
+
 VOLUME /backups
 
 #adding a user to this image adds it at 999
