@@ -4,7 +4,7 @@ if ! [ -f backup-cron ]
 then
   echo "Creating cron entry to start backup at: $BACKUP_TIME"
   # Note: Must use tabs with indented 'here' scripts.
-  cat <<-EOF >> backup-cron
+  cat <<-EOF >> bin/backup-cron
 MYSQL_ENV_MYSQL_HOST=$MYSQL_ENV_MYSQL_HOST
 MYSQL_ENV_MYSQL_USER=$MYSQL_ENV_MYSQL_USER
 MYSQL_ENV_MYSQL_DATABASE=$MYSQL_ENV_MYSQL_DATABASE
@@ -15,9 +15,9 @@ EOF
   then
     echo "CLEANUP_OLDER_THAN=$CLEANUP_OLDER_THAN" >> backup-cron
   fi
-  echo "$BACKUP_TIME backup > /backup.log" >> backup-cron
+  echo "$BACKUP_TIME backup > bin/backup.log" >> backup-cron
 
-  crontab backup-cron
+  crontab bin/backup-cron
 fi
 
 echo "Current crontab:"
