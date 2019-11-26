@@ -22,7 +22,8 @@ RUN wget -O /usr/local/bin/go-crond https://github.com/webdevops/go-crond/releas
 #create backup folder and give user access
 RUN mkdir /backups
 RUN chown -R wp-backup:wp-backup /backups &&\
-    chown -R wp-backup:wp-backup /usr/local/bin
+    chown -R wp-backup:wp-backup /usr/local/bin &&\
+    chmod +rwx /usr/local/bin
     
 ENV MYSQL_ENV_MYSQL_HOST mysql-db
 ENV BACKUP_TIME "0 3 * * *"
@@ -42,4 +43,4 @@ VOLUME /backups
 USER 999
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-CMD ["go-crond", "-f"]
+CMD ["go-crond"]
