@@ -13,8 +13,9 @@ RUN groupadd -r wp-backup && useradd -r -g wp-backup wp-backup
 
 #patch away
 RUN date &&\
-    yum -y update && \
-    yum -y install wget mysql cron bzip2 rysnc tar -y && \
+    yum -y update &&\
+    yum -y install rsync &&\
+    yum -y install wget mysql bzip2 -y &&\
     yum clean all
 
 # install go-cron
