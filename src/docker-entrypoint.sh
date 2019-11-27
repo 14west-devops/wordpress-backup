@@ -29,7 +29,7 @@ EOF
 
   #cat bin/backup-cron
 
-  go-crond --allow-unprivileged --verbose wp-backup:/usr/local/bin/backup-cron 
+  go-crond --allow-unprivileged --verbose root:/usr/local/bin/backup-cron 
 fi
 
 echo "Current go-crond:"
