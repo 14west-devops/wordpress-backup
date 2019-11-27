@@ -23,16 +23,16 @@ RUN wget -O /usr/local/bin/go-crond https://github.com/webdevops/go-crond/releas
     chmod +x /usr/local/bin/go-crond
 
 # install oc client tools for assist in restore
-ENV OC_VERSION=openshift-origin-client-tools-v3.11.0-0731b2f-347-linux-64bit
-RUN wget -O /tmp/openshift.tar.gz https://artifacts-openshift-release-3-11.svc.ci.openshift.org/zips/${OC_VERSION}.tar.gz &&\
-    cd /tmp &&\
-    ls -lsa
+# ENV OC_VERSION=openshift-origin-client-tools-v3.11.0-0731b2f-347-linux-64bit
+# RUN wget -O /tmp/openshift.tar.gz https://artifacts-openshift-release-3-11.svc.ci.openshift.org/zips/${OC_VERSION}.tar.gz &&\
+#     cd /tmp &&\
+#     ls -lsa
 
-RUN tar -xvf /tmp/openshift.tar.gz -C /tmp
+# RUN tar -xvf /tmp/openshift.tar.gz -C /tmp
 
-RUN rm /tmp/openshift.tar.gz &&\
-    cp -rpv /tmp/${OC_VERSION}/* /usr/local/bin &&\
-    rm -R /tmp/${OC_VERSION}
+# RUN rm /tmp/openshift.tar.gz &&\
+#     cp -rpv /tmp/${OC_VERSION}/* /usr/local/bin &&\
+#     rm -R /tmp/${OC_VERSION}
 
 #create backup folder and give user access
 RUN mkdir /backups

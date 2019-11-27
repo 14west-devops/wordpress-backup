@@ -14,6 +14,7 @@ if [ -z "$MYSQL_ENV_MYSQL_USER" ]; then echo "Error: MYSQL_ENV_MYSQL_USER not se
 if [ -z "$MYSQL_ENV_MYSQL_DATABASE" ]; then echo "Error: MYSQL_ENV_MYSQL_DATABASE not set"; echo "Finished: FAILURE"; exit 1; fi
 if [ -z "$MYSQL_ENV_MYSQL_PASSWORD" ]; then echo "Error: MYSQL_ENV_MYSQL_PASSWORD not set"; echo "Finished: FAILURE"; exit 1; fi
 if [ -z "$MYSQL_PORT_3306_TCP_PORT" ]; then echo "Error: MYSQL_PORT_3306_TCP_PORT not set"; echo "Finished: FAILURE"; exit 1; fi
+if [ -z "$WORDPRESS_SITE_URL" ]; then echo "Error: WORDPRESS_SITE_URL not set"; echo "Finished: FAILURE"; exit 1; fi
 
 if ! [[ $1 =~ ^[a-zA-Z0-9_-]+$ ]]
 then
@@ -63,4 +64,10 @@ cat /var/www/html/wp-config.php
 echo "restoring data from mysql dump file $SQL_ARCHIVE"
 bunzip2 < "${SQL_ARCHIVE}" | mysql --user="${MYSQL_ENV_MYSQL_USER}" --password="${MYSQL_ENV_MYSQL_PASSWORD}" --host="${MYSQL_ENV_MYSQL_HOST}" "${MYSQL_ENV_MYSQL_DATABASE}"
 
+# update site url in wordpress db
+echo "restoring site url to ${WORDPRESS_SITE_URL}"
+UPDATE_SQL="use wordpress; update wp_options set value = ${WORDPRESS_SITE_URL} where option_id in (1,2);"
+mysql --user="${MYSQL_ENV_MYSQL_USER}" --password="${MYSQL_ENV_MYSQL_PASSWORD}" --host="${MYSQL_ENV_MYSQL_HOST}" "${MYSQL_ENV_MYSQL_DATABASE}" -Bse $UPDATE_SQL
+
+# update 
 echo 'Finished: SUCCESS'
