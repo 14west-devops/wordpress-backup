@@ -55,7 +55,6 @@ sed -i s/"define( 'DB_NAME', '.*' );"/"define('DB_NAME', '$MYSQL_ENV_MYSQL_DATAB
 sed -i s/"define( 'DB_USER', '.*' );"/"define('DB_USER', '$MYSQL_ENV_MYSQL_USER');"/g /var/www/html/wp-config.php
 sed -i s/"define( 'DB_PASSWORD', '.*' );"/"define('DB_PASSWORD', '$MYSQL_ENV_MYSQL_PASSWORD');"/g /var/www/html/wp-config.php
 sed -i "s/define( 'DB_HOST', '.*' );"/"define('DB_HOST', '$MYSQL_ENV_MYSQL_HOST:$MYSQL_PORT_3306_TCP_PORT');/g" /var/www/html/wp-config.php
-cat /var/www/html/wp-config.php
 
 # set correct file owner
 #chown -R 999:999 /var/www/html
@@ -66,8 +65,9 @@ bunzip2 < "${SQL_ARCHIVE}" | mysql --user="${MYSQL_ENV_MYSQL_USER}" --password="
 
 # update site url in wordpress db
 echo "restoring site url to ${WORDPRESS_SITE_URL}"
-UPDATE_SQL="use wordpress; update wp_options set value = ${WORDPRESS_SITE_URL} where option_id in (1,2);"
-mysql --user="${MYSQL_ENV_MYSQL_USER}" --password="${MYSQL_ENV_MYSQL_PASSWORD}" --host="${MYSQL_ENV_MYSQL_HOST}" "${MYSQL_ENV_MYSQL_DATABASE}" -Bse $UPDATE_SQL
+UPDATE_SQL="use wordpress; update wp_options set value = '${WORDPRESS_SITE_URL}' where option_id in (1,2);"
+echo ${UPDATE_SQL}
+mysql --user="${MYSQL_ENV_MYSQL_USER}" --password="${MYSQL_ENV_MYSQL_PASSWORD}" --host="${MYSQL_ENV_MYSQL_HOST}" --eexecute "$UPDATE_SQL" "${MYSQL_ENV_MYSQL_DATABASE}"
 
 # update 
 echo 'Finished: SUCCESS'
