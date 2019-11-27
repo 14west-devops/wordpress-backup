@@ -23,6 +23,14 @@ ENV GOCROND_VERSION=0.6.0
 RUN wget -O /usr/local/bin/go-crond https://github.com/webdevops/go-crond/releases/download/$GOCROND_VERSION/go-crond-64-linux &&\
     chmod +x /usr/local/bin/go-crond
 
+# install oc client tools for assist in restore
+ENV OC_VERSION=3.11
+RUN wget -O /tmp/openshift.tar.gz https://artifacts-openshift-release-3-11.svc.ci.openshift.org/zips/openshift-origin-client-tools-v3.11.0-0731b2f-347-linux-64bit.tar.gz &&\
+    mkdir /tmp/openshift &&\
+    tar -xzf /tmp/openshift.tar.gz --overwrite -C /tmp/openshift &&\
+    rm /tmp/openshift.tar.gz &&\
+    cp -rpv /tmp/openshift /usr/local/bin
+
 #create backup folder and give user access
 RUN mkdir /backups
 RUN chown -R wp-backup:wp-backup /backups &&\
