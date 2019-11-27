@@ -12,8 +12,7 @@ LABEL name="14WestDevOps/wordpress-backup" \
 RUN groupadd -r wp-backup && useradd -r -g wp-backup wp-backup
 
 #patch away
-RUN date &&\
-    yum -y update &&\
+RUN yum -y update &&\
     yum -y install rsync &&\
     yum -y install wget mysql bzip2 -y &&\
     yum clean all
@@ -24,12 +23,16 @@ RUN wget -O /usr/local/bin/go-crond https://github.com/webdevops/go-crond/releas
     chmod +x /usr/local/bin/go-crond
 
 # install oc client tools for assist in restore
-ENV OC_VERSION=3.11
-RUN wget -O /tmp/openshift.tar.gz https://artifacts-openshift-release-3-11.svc.ci.openshift.org/zips/openshift-origin-client-tools-v3.11.0-0731b2f-347-linux-64bit.tar.gz &&\
-    mkdir /tmp/openshift &&\
-    tar -xzf /tmp/openshift.tar.gz --overwrite -C /tmp/openshift &&\
-    rm /tmp/openshift.tar.gz &&\
-    cp -rpv /tmp/openshift /usr/local/bin
+ENV OC_VERSION=openshift-origin-client-tools-v3.11.0-0731b2f-347-linux-64bit
+RUN wget -O /tmp/openshift.tar.gz https://artifacts-openshift-release-3-11.svc.ci.openshift.org/zips/${OC_VERSION}.tar.gz &&\
+    cd /tmp &&\
+    ls -lsa
+
+RUN tar -xvf /tmp/openshift.tar.gz -C /tmp
+
+RUN rm /tmp/openshift.tar.gz &&\
+    cp -rpv /tmp/${OC_VERSION}/* /usr/local/bin &&\
+    rm -R /tmp/${OC_VERSION}
 
 #create backup folder and give user access
 RUN mkdir /backups
