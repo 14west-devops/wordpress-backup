@@ -65,9 +65,8 @@ bunzip2 < "${SQL_ARCHIVE}" | mysql --user="${MYSQL_ENV_MYSQL_USER}" --password="
 
 # update site url in wordpress db
 echo "restoring site url to ${WORDPRESS_SITE_URL}"
-UPDATE_SQL="use wordpress; update wp_options set value = '${WORDPRESS_SITE_URL}' where option_id in (1,2);"
-echo ${UPDATE_SQL}
-mysql --user="${MYSQL_ENV_MYSQL_USER}" --password="${MYSQL_ENV_MYSQL_PASSWORD}" --host="${MYSQL_ENV_MYSQL_HOST}" --eexecute "$UPDATE_SQL" "${MYSQL_ENV_MYSQL_DATABASE}"
+UPDATE_SQL="use wordpress; update wp_options set options_value = '${WORDPRESS_SITE_URL}' where option_id in (1,2);"
+mysql --user="${MYSQL_ENV_MYSQL_USER}" --password="${MYSQL_ENV_MYSQL_PASSWORD}" --host="${MYSQL_ENV_MYSQL_HOST}" --execute="$UPDATE_SQL" "${MYSQL_ENV_MYSQL_DATABASE}"
 
 # update 
-echo 'Finished: SUCCESS'
+echo "Finished: SUCCESS.  Visit ${WORDPRESS_SITE_URL}"
